@@ -4,7 +4,7 @@
 * how its working
 * main.ts  --> app.module --> app.controller --> app.service
 
-## Clase 4
+## Clase 4 - Controller
 * Entity of the list of Tags
 * A goood aproach is to isolate everything inside modules
 * A convection name is to name the modules as singular
@@ -15,3 +15,19 @@
 * Bind the controller to the module this called Dependency Injection (we are injected dependencies and split the application in modules)
 * Define the route inside Controller with a function is important add the decorator according to the method
 * run with yarn start:dev for watch mode
+
+## Clase 5 - Services
+* Actually we can write  the hole logic (connecting to database, fetching data, etc) directly on controller
+* But a better aproach is to use services
+* Services is some additional class with some methods
+* We can create the service where we can writte all buisness logic related
+* Need to registed as an injectable service for the nestjs application
+* We can do that with Injectable
+* In Service we define the method that will return the data
+* To use the service in the controller we need register insider the module
+* We do that with providers (another array)
+* The idea is that the service is also isolated inside the module
+* Now we can use the service in the controller, we need a constructor for that
+* Inside constructor we need to define all services that we want to use inside the controller
+* This approach is better becouse we isolate buisness logic on service, also we can share the service between different modules.
+* We are using typescript so we should add types on service method and on the controller
