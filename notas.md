@@ -51,7 +51,7 @@
 * Privilegies for user to manage the database
 `grant all privileges on database mediumclone to daniel;`
 
-## Clase 7- Configure database inside the app
+## Clase 8- Configure database inside the app
 * First configure TypeORM
 * Install `yarn add typeorm`
 * Create new file on src `ormconfig.ts` , inside we provide the credentials for database and configuration for TypeORM
@@ -77,7 +77,7 @@ export default config;
 `imports: [TypeOrmModule.forRoot(ormconfig), TagModule],`
 
 
-## Clase 7- Create Tag Entity
+## Clase 9- Create Tag Entity
 * Entity is the representation of database table, similar to Model on other ORM, this is Object or Entity wich we will comunicate
 * We can define the fields of the Enity
 * inside tag folder we create `tag.entity.ts`,
@@ -89,3 +89,62 @@ export default config;
 * See all the tables `\dt` we see that was successfully created
 * To se the content of the table `\d tags`
 * TypeORM isolates a lot of stuff creating entities
+
+## Clase 10 - Working with tags repository
+* Create new records for tags on psql
+* In postgres we use `"` for names od the table and `'` for strings
+```
+INSERT INTO tags(name) VALUES('dragons');
+```
+* Verify `SELECT * FROM tags;`
+* Now we use on nestjs, we work with database only inside service
+* Repository is a special pattern how we are getting things inside our service
+* The operation to get some data from database is asynchronus,  thats why findAll returns a Promise and we specify data type using generic of typescript
+* We need to inject the Repository on th constructor and need to update to async on tag.service
+```
+@Injectable()
+export class TagService {
+  constructor(
+    //We want Repository to work with this table
+    @InjectRepository(TagEntity)
+    private readonly tagRepository: Repository<TagEntity>,
+  ) {}
+  async findAll(): Promise<TagEntity[]> {
+    return await this.tagRepository.find();
+  }
+}
+
+```
+* also update on controller
+```
+@Controller('tags')
+export class TagController {
+  // Constructor define all our services that we want to use inside this controlles
+  constructor(private readonly tagService: TagService) {}
+
+  @Get()
+  async findAll(): Promise<TagEntity[]> {
+    return await this.tagService.findAll();
+  }
+}
+```
+* And on app.module we need to specify TagEntity
+` imports: [TypeOrmModule.forFeature([TagEntity])],`
+
+* For structure the data responsse we can do it on controller and update typescript data type
+```
+@Controller('tags')
+export class TagController {
+  // Constructor define all our services that we want to use inside this controlles
+  constructor(private readonly tagService: TagService) {}
+
+  @Get()
+  async findAll(): Promise<{ tags: string[] }> {
+    const tags = await this.tagService.findAll();
+    return {
+      tags: tags.map((tag) => tag.name),
+    };
+  }
+}
+
+```
