@@ -1,12 +1,12 @@
 ## Clase 3
 * Module in Nestjs -> the way how nestjs structure an application is through dependency injection
-* We need modules to isolate logic and slit it
+* We need modules to isolate logic and split it
 * how its working
-* main.ts  --> app.module --> app.controller --> app.service
+* main.ts  --> app.module --> app.controller, app.service
 
 ## Clase 4 - Controller
 * Entity of the list of Tags
-* A goood aproach is to isolate everything inside modules
+* A good aproach is to isolate everything inside modules
 * A convection name is to name the modules as singular
 * The file consist of name of module . postfix module . extension
 * Create Module
@@ -31,3 +31,22 @@
 * Inside constructor we need to define all services that we want to use inside the controller
 * This approach is better becouse we isolate buisness logic on service, also we can share the service between different modules.
 * We are using typescript so we should add types on service method and on the controller
+
+## Clase 6 - Absolute path nestjs
+
+## Clase 7- Postgres
+* This app have a lot of relations thats why we choose a relational database
+* With mongodb can also build relations, but it takes more time and effort and is not really better than traditional databases
+* to connect to postgress
+`sudo -u postgres psql`
+* Show all databases --> It looks like a normal table
+`\l`
+* Show all users --> display users
+`\du`
+* We need to create a user to manage the database we will create, becouse we dont want to use useperuser postgres 
+* Create database 
+`create database mediumclone;`
+* Create user 
+`create user daniel with encrypted password 'password';`
+* Privilegies for user to manage the database
+`grant all privileges on database mediumclone to daniel;`
