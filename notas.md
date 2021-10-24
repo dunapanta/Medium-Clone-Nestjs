@@ -75,3 +75,17 @@ export default config;
 * Install `yarn add @nestjs/typeorm`
 * Inside `app.module.ts` we need to add TypeOrmModule
 `imports: [TypeOrmModule.forRoot(ormconfig), TagModule],`
+
+
+## Clase 7- Create Tag Entity
+* Entity is the representation of database table, similar to Model on other ORM, this is Object or Entity wich we will comunicate
+* We can define the fields of the Enity
+* inside tag folder we create `tag.entity.ts`,
+* All ids on postgress are numbers
+* After specify the entity  we need to add the property `entities` on `ormconfig.ts`, we provide this and TypeORM can generate them (Is not the best way, we do it just for the start)
+`entities: [__dirname + '/**/*.entity{.ts,.js}'],`
+* We also add `synchronize: true` on `ormconfig.ts` Every time when we start our web application TypeORM will synchonize all our entities and create table in database if needed
+* Connect database in postgress `\c mediumclone;`
+* See all the tables `\dt` we see that was successfully created
+* To se the content of the table `\d tags`
+* TypeORM isolates a lot of stuff creating entities
