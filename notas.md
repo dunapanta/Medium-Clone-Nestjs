@@ -50,3 +50,28 @@
 `create user daniel with encrypted password 'password';`
 * Privilegies for user to manage the database
 `grant all privileges on database mediumclone to daniel;`
+
+## Clase 7- Configure database inside the app
+* First configure TypeORM
+* Install `yarn add typeorm`
+* Create new file on src `ormconfig.ts` , inside we provide the credentials for database and configuration for TypeORM
+```
+import { ConnectionOptions } from 'typeorm';
+
+const config: ConnectionOptions = {
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'daniel',
+  password: '123456',
+  database: 'mediumclone',
+};
+
+export default config;
+
+```
+* We need to install postgres `yarn add pg`
+* We need to install bidings for nestjs and TypeORM
+* Install `yarn add @nestjs/typeorm`
+* Inside `app.module.ts` we need to add TypeOrmModule
+`imports: [TypeOrmModule.forRoot(ormconfig), TagModule],`
