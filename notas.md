@@ -201,3 +201,13 @@ mediumclone=# select * from migrations;
 * When we want to create a new migration TypeOrm checks in what state our table and database is and what entities we have, if we have something different then thsi changes will go in this migration
 * Every single time when we are changing database you create new migration and this is a must, in other way you dont know what you really change
 * In production normaly clone the project and also excecute migrationand later if production want to change a field or add new table, simple locally create new migration and then exceute this migration on production, and you are sure you wont break the database becouse inside migration you are really know how you are changing the state
+
+## Clase 12 - Preparing Register Request
+* We create new module `user.module.ts`
+* first define module
+* register on app.module
+* write controller
+* bind user.controller on user.module
+* create service
+* bind user.service on user.module
+* Include service on constructor of user.controller
