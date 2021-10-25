@@ -1,4 +1,3 @@
-import { dirname } from 'path/posix';
 import { ConnectionOptions } from 'typeorm';
 
 const config: ConnectionOptions = {
@@ -9,7 +8,11 @@ const config: ConnectionOptions = {
   password: 'dragon',
   database: 'mediumclone',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true,
+  synchronize: false,
+  migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+  cli: {
+    migrationsDir: 'src/migrations',
+  },
 };
 
 export default config;

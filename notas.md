@@ -92,7 +92,7 @@ export default config;
 
 ## Clase 10 - Working with tags repository
 * Create new records for tags on psql
-* In postgres we use `"` for names od the table and `'` for strings
+* In postgres we use `"` for names of the table and `'` for strings
 ```
 INSERT INTO tags(name) VALUES('dragons');
 ```
@@ -131,7 +131,7 @@ export class TagController {
 * And on app.module we need to specify TagEntity
 ` imports: [TypeOrmModule.forFeature([TagEntity])],`
 
-* For structure the data responsse we can do it on controller and update typescript data type
+* For structure the data response we can do it on controller and update typescript data type
 ```
 @Controller('tags')
 export class TagController {
@@ -148,3 +148,56 @@ export class TagController {
 }
 
 ```
+
+## Clase 11 - Creating Migrations
+### - Theory
+* The option `synchronize: true` only exist on TypeORM in other frameworks we use migrations
+* We create table through migrations, that means that we create new migration and inside we create a table
+* It is impotant becouse we save somewhere how we are changing our database
+* Every single time when we need to update something in database we are migrating our SCHEMA
+* It means we have the old state and we are getting a new state trough our migration
+* It works similar to git that you have commits in the repository and you can switch to older versions
+* Also `synchronize: true` is unsafe for production becouse there we dont want to remove any data, wich means we must fully control how we create tables
+* Always use migrations and never `synchronize: true` for a real project.
+### - Code
+* Now I have only Entity tags wich means in psql wef have tags table
+* Normaly 
+ - We want to start our application or at least set up our project
+ - Then we want to create our database completly from cli
+ - Then we want to migrate all our migrations that we have
+ - Then we have schema of the table
+ * Drop the database
+ * On `package.json` we add `"typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/ormconfig.ts" to create the command
+ * Now to use `typeorm` command inside other command we need to ejecute with `yarn`
+ * Now create command `"db:drop": "yarn typeorm schema:drop"` this will delete all tables inside database
+ * Now we can excecute `yarn db:drop`
+ * The next step is to create a migration --> We have entity tag and we want to create a migration
+ * Inside `package.json` we add command `"db:create": "yarn typeorm migration:generate -- -n"` --> -- -n this is the atribute and we can provide the name
+ * Then on `ormconfg.ts` we add migations path `migrations: [__dirname + '/migrations/**/*{.ts, .js}'],` we want to store all our migrations in a single part inside source
+ * Also we need to provide configuration for cli on `ormconfg.ts` we add
+ ```
+ cli: {
+      migrationsDir: 'src/migrations'
+  }
+```
+* We excecute `yarn db:create CreateTags` ---> CreateTags is just a filename. Migration has been created based on our Entity Tag
+* Inside the new file we have two functions up and down, the idea is that we can rollback our migration
+* In up function is define what migration is doing 
+* And if we want to rollback we can use down
+* How we can excecute is migation? 
+* Normaly when we just setup the empty database we want to apply the correct schema, wich means we need to run all our migrations that we have and genearate the latest version of our schema
+* To do so we create a new commad to run our migrations
+* On `package.json` we add `"db:migrate": "yarn typeorm migration:run"`
+* `yarn db:migrate` This command excecutes all our migration in correct order
+* It creates tables migrations and tags
+```
+mediumclone=# select * from migrations;
+ id |   timestamp   |          name           
+----+---------------+-------------------------
+  1 | 1635126349162 | CreateTags1635126349162
+(1 row)
+```
+* TypeORM it stores the migrations, it will use this information to understand what migrations it needs to excecute
+* When we want to create a new migration TypeOrm checks in what state our table and database is and what entities we have, if we have something different then thsi changes will go in this migration
+* Every single time when we are changing database you create new migration and this is a must, in other way you dont know what you really change
+* In production normaly clone the project and also excecute migrationand later if production want to change a field or add new table, simple locally create new migration and then exceute this migration on production, and you are sure you wont break the database becouse inside migration you are really know how you are changing the state
