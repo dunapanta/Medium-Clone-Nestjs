@@ -205,9 +205,37 @@ mediumclone=# select * from migrations;
 ## Clase 12 - Preparing Register Request
 * We create new module `user.module.ts`
 * first define module
-* register on app.module
+* register module on app.module
 * write controller
 * bind user.controller on user.module
 * create service
 * bind user.service on user.module
 * Include service on constructor of user.controller
+
+## Clase 13 - DTO Data Transfer Object
+* In Nestjs when we are making post request we have body and in Nestjs is name DTO
+* This is the schema of the payload that we provide to our backend
+* We can validate DTO inside Nestjs
+* DTO is a class and not an interface
+* We have special decorator to get body directly from request @Body, createUserDto is the name of the local property
+```
+  async createrUser(@Body('user') createUserDto: any): Promise<any> {
+    console.log('createUser', createUserDto);
+    return this.userService.createUser();
+  }
+```
+* We want to specify types
+* Inteface is just a data type and it  only exist inside typescript
+* Clases actually exist on JavaScript becouse this is just prototypes been called
+* For validate DTO we can do it with a class
+* Sor we create a new folder `dto` and inside a file `createUser.to.ts`
+```
+export class CreateUserDto {
+  readonly username: string;
+  readonly email: string;
+  readonly password: string;
+}
+
+```
+We define readonly becouse this is the payload and we shold not change our payload
+* The point is that later we will validate data inside this class
